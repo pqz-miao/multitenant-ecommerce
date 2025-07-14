@@ -29,7 +29,7 @@ export const CategoriesSidebar = ({
     const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
     const [parentCategories, setParentCategories] = useState<CategoriesGetManyOutput | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[1] | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[number] | null>(null);
 
     // If we have parent categories, show those, otherwise show root categories
     const currentCategories = parentCategories ?? data ?? [];
@@ -40,7 +40,7 @@ export const CategoriesSidebar = ({
         onOpenChange(open);
     };
 
-    const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
+    const handleCategoryClick = (category: CategoriesGetManyOutput[number]) => {
         if (category.subcategories && category.subcategories.length > 0) {
             setParentCategories(category.subcategories as CategoriesGetManyOutput);
             setSelectedCategory(category);
