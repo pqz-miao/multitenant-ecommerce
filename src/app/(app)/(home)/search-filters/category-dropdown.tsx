@@ -13,7 +13,7 @@ import { SubcategoryMenu } from "./subcategory-menu";
 import { useDropdownPosition } from "./use-dropdown-position";
 
 interface Props {
-    category: CategoriesGetManyOutput[1];
+    category: CategoriesGetManyOutput[number];
     isActive?: boolean;
     isNavigationHovered?: boolean;
 };

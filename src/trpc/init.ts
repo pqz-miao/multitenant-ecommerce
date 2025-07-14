@@ -1,4 +1,5 @@
 import { cache } from "react";
+import superjson from "superjson";
 import { getPayload } from "payload";
 import { initTRPC } from "@trpc/server";
 
@@ -9,7 +10,7 @@ export const createTRPCContext = cache(async () => {
 });
 
 const t = initTRPC.create({
-    // transformer: superjson,
+    transformer: superjson,
 });
 
 export const createTRPCRouter = t.router;

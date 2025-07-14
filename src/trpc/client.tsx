@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import superjson from "superjson";
 import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
@@ -42,7 +43,7 @@ export function TRPCReactProvider(
         createTRPCClient<AppRouter>({
             links: [
                 httpBatchLink({
-                    // transformer: superjson,
+                    transformer: superjson,
                     url: getUrl(),
                 }),
             ],
