@@ -53,7 +53,7 @@ export const CategoryDropdown = ({
                     )}
                 >
                     <Link
-                        href={`/${category.slug === "all" ? "" : category.slug}`}
+                        href={`/c/${category.slug === "all" ? "" : category.slug}`}
                     >
                         {category.name}
                     </Link>
