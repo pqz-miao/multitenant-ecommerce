@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
 
-import { ProductCard } from "./product-card";
+import { ProductCard, ProductCardSkeleton } from "./product-card";
 import { useProductFilters } from "../../hooks/use-product-filters";
 
 interface Props {
@@ -81,7 +81,7 @@ export const ProductsListSkeleton = () => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {Array.from({ length: DEFAULT_LIMIT }).map((_, index) => (
-                <ProductsListSkeleton key={index} />
+                <ProductCardSkeleton key={index} />
             ))}
         </div>
     );
