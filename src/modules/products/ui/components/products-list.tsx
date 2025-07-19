@@ -28,7 +28,8 @@ export const ProductsList = ({ category }: Props) => {
         ...filters,
         category,
         limit: DEFAULT_LIMIT,
-        }, {
+        }, 
+        {
             getNextPageParam: (lastPage) => {
                 return lastPage.docs.length > 0 ? lastPage.nextPage : undefined;
             },
