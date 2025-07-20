@@ -13,3 +13,7 @@ export function formatCurrency(price: number) {
     maximumFractionDigits: 2,
   }).format(price);
 }
+
+export function generateTenantURL(tenantSlug: string) {
+  return `/tenants/${tenantSlug}`;
+}
