@@ -2,8 +2,8 @@ import { z } from "zod";
 import type { Sort, Where } from "payload";
 
 import { DEFAULT_LIMIT } from "@/constants";
-import { Category, Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { Category, Media, Product, Tenant } from "@/payload-types";
 
 import { sortValues } from "../search-params";
 
@@ -112,6 +112,25 @@ export const productsRouter = createTRPCRouter({
                     image: doc.image as Media | null,
                     tenant: doc.tenant as Tenant & { image: Media | null },
                 })),
+            };
+        }),
+    getOne: baseProcedure
+        .input(
+            z.object({
+                id: z.string(),
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            const product = await ctx.db.findByID({
+                collection: "products",
+                id: input.id,
+                depth: 2, // Load the "product.image", "product.tenant", and "product.tenant.image"
+            });
+
+            return {
+                ...product,
+                image: product.image as Media | null,
+                tenant: product.tenant as Tenant & { image: Media | null },
             };
         }),
 });
