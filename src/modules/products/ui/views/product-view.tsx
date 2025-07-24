@@ -110,6 +110,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                                 <div className="flex flex-row items-center gap-2">
                                     {data.isPurchased ? (
                                         <Button
+                                            asChild
                                             variant="elevated"
                                             className="flex-1 font-medium bg-white"
                                         >

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import type { Sort, Where } from "payload";
+import { TRPCError } from "@trpc/server";
 
 import { DEFAULT_LIMIT } from "@/constants";
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { Media, Tenant } from "@/payload-types";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 export const libraryRouter = createTRPCRouter({
     getMany: protectedProcedure
@@ -46,5 +46,53 @@ export const libraryRouter = createTRPCRouter({
                     tenant: doc.tenant as Tenant & { image: Media | null },
                 })),
             };
+        }),
+    getOne: protectedProcedure
+        .input(
+            z.object({
+                productId: z.string(),
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            const data = await ctx.db.find({
+                collection: "orders",
+                limit: 1,
+                pagination: false,
+                where: {
+                    and: [
+                        {
+                            product: {
+                                equals: input.productId,
+                            },
+                        },
+                        {
+                            user: {
+                                equals: ctx.session.user.id,
+                            },
+                        },
+                    ],
+                },
+            });
+
+            const order = data.docs[0];
+
+            if (!order) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Order not found",
+                });
+            }
+
+            const product = await ctx.db.findByID({
+                collection: "products",
+                id: input.productId,
+            });
+
+            if (!product) {
+                throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" }
+                );
+            }
+
+            return product;
         }),
 });

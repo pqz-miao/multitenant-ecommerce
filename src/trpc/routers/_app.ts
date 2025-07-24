@@ -7,6 +7,7 @@ import { productsRouter } from "@/modules/products/server/procedures";
 import { categoriesRouter } from "@/modules/categories/server/procedures";
 
 import { createTRPCRouter } from "../init";
+import { reviewsRouter } from "@/modules/reviews/server/procedures";
 
 export const appRouter = createTRPCRouter({
     auth: authRouter,
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
     tenants: tenantsRouter,
     checkout: checkoutRouter,
     library: libraryRouter,
+    reviews: reviewsRouter,
 });
 
 export type AppRouter = typeof appRouter;
