@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Poppins } from "next/font/google";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
@@ -31,15 +31,44 @@ const poppins = Poppins({
 
 export const SignInView = () => {
     const router = useRouter();
+
     const trpc = useTRPC();
+    const queryClient = useQueryClient();
+
     const login = useMutation(trpc.auth.login.mutationOptions({
         onError: (error) => {
             toast.error(error.message);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(trpc.auth.session.queryOptions());
             router.push("/");
         },
     }));
+
+    // const login = useMutation({
+    //     mutationFn: async (values: z.infer<typeof loginSchema>) => {
+    //         const response = await fetch("/api/users/login", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(values),
+    //         });
+
+    //         if (!response.ok) {
+    //             const error = await response.json();
+    //             throw new Error(error.message || "Login failed");
+    //         }
+
+    //         return response.json();
+    //     },
+    //     onError: (error) => {
+    //         toast.error(error.message);
+    //     },
+    //     onSuccess: () => {
+    //         router.push("/");
+    //     },
+    // });
 
     const form = useForm<z.infer<typeof loginSchema>>({
         mode: "all",
@@ -83,6 +112,7 @@ export const SignInView = () => {
                             Welcome back to Funroad.
                         </h1>
                         <FormField
+                            control={form.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
@@ -95,6 +125,7 @@ export const SignInView = () => {
                             )}
                         />
                         <FormField
+                            control={form.control}
                             name="password"
                             render={({ field }) => (
                                 <FormItem>

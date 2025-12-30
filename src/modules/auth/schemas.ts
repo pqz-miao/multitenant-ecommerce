@@ -9,7 +9,7 @@ export const registerSchema = z
             .min(3, "Username must be at least 3 characters")
             .max(63, "Username must be less than 63 characters")
             .regex(
-                /^[a-z0-9][a-u0-9-]*[a-z0-9]$/,
+                /^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/,
                 "Username can only contain lowercase letters, numbers and hyphens. It must start and end with a letter or number"
             )
             .refine(

@@ -20,6 +20,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories],
+  // cookiePrefix: "funroad",
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
