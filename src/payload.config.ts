@@ -1,5 +1,6 @@
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -8,6 +9,7 @@ import sharp from "sharp";
 import { Tags } from "./collections/Tags";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
+import { Tenants } from "./collections/Tenants";
 import { Products } from "./collections/Products";
 import { Categories } from "./collections/Categories";
 
@@ -21,7 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products, Tags],
+  collections: [Users, Media, Categories, Products, Tags, Tenants],
   // cookiePrefix: "funroad",
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
@@ -32,5 +34,15 @@ export default buildConfig({
     url: process.env.DATABASE_URL || "",
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    multiTenantPlugin({
+      collections: {
+        products: {},
+      },
+      tenantsArrayField: {
+        includeDefaultField: false,
+      },
+      userHasAccessToAllTenants: (user) => Boolean(user?.roles?.includes("super-admin")),
+    }),
+  ],
 });
