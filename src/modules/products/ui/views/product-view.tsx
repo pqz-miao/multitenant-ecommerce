@@ -106,7 +106,19 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                         <div className="border-t lg:border-t-0 lg:border-l h-full">
                             <div className="flex flex-col gap-4 p-6 border-b">
                                 <div className="flex flex-row items-center gap-2">
-                                    <CartButton tenantSlug={tenantSlug} productId={productId} />
+                                    {data.isPurchased ? (
+                                        <Button
+                                            variant="elevated"
+                                            asChild
+                                            className="flex-1 font-medium bg-white"
+                                        >
+                                            <Link prefetch href={`/library/${data.id}`}>
+                                                View in Library
+                                            </Link>
+                                        </Button>
+                                    ) : (
+                                        <CartButton tenantSlug={tenantSlug} productId={productId} />
+                                    )}
                                     <Button
                                         className="size-12"
                                         variant="elevated"
